@@ -1,0 +1,191 @@
+﻿<Window x:Class="Microsoft.Samples.Kinect.GreenScreen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="KINECT Showreel" Height="850" Width="770" Loaded="WindowLoaded" Closing="WindowClosing">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e"/>
+        <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f"/>
+        <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2"/>
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" x:Key="SnapshotButton" >
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <TextBlock x:Name="SnapText" Text="{TemplateBinding Content}" TextAlignment="Left"  VerticalAlignment="Center" Foreground="{StaticResource KinectPurpleBrush}" FontSize="15" />
+                                <Grid Margin="9,0,0,0">
+                                    <Image x:Name="SnapNormal" Source="Images\SnapNormal.png" Stretch="None" HorizontalAlignment="Center"/>
+                                    <Image x:Name="SnapHover" Source="Images\SnapHover.png" Stretch="None" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="SnapNormal"/>
+                                <Setter Property="Visibility" Value="Visible" TargetName="SnapHover"/>
+                                <Setter Property="Foreground" Value="{StaticResource KinectBlueBrush}" TargetName="SnapText"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type CheckBox}" x:Key="SquareCheckBox" >
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <Grid x:Name="SquareCheckBoxChecked">
+                                    <Image x:Name="CheckedNormal" Source="Images\CheckedNormal.png" Stretch="None" HorizontalAlignment="Center"/>
+                                    <Image x:Name="CheckedHover" Source="Images\CheckedHover.png" Stretch="None" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                                </Grid>
+                                <Grid x:Name="SquareCheckBoxUnchecked" Visibility="Collapsed">
+                                    <Image x:Name="UncheckedNormal" Source="Images\UncheckedNormal.png" Stretch="None" HorizontalAlignment="Center"/>
+                                    <Image x:Name="UncheckedHover" Source="Images\UncheckedHover.png" Stretch="None" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                                </Grid>
+                                <TextBlock x:Name="SquareCheckBoxText" Text="{TemplateBinding Content}" TextAlignment="Left"  VerticalAlignment="Center" Foreground="{StaticResource KinectPurpleBrush}" FontSize="15"  Margin="9,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="false">
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="SquareCheckBoxChecked"/>
+                                <Setter Property="Visibility" Value="Visible" TargetName="SquareCheckBoxUnchecked"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="CheckedNormal"/>
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="UncheckedNormal"/>
+                                <Setter Property="Visibility" Value="Visible" TargetName="CheckedHover"/>
+                                <Setter Property="Visibility" Value="Visible" TargetName="UncheckedHover"/>
+                                <Setter Property="Foreground" Value="{StaticResource KinectBlueBrush}" TargetName="SquareCheckBoxText"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Name="layoutGrid" Margin="10 0 10 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Margin="0 0 0 20">
+            <TextBlock DockPanel.Dock="Right" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18" Text="KINECT Showreel"></TextBlock>
+            <Image Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5"/>
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <Image Name ="Backdrop"/>
+            <MediaElement LoadedBehavior="Manual" Margin="-1,0,0,0" Name="MediaEL" />
+            <Image Name ="MaskedColor"/>
+            <Canvas Name="MainCanvas">
+                <Rectangle
+                Name="CaptureRect"
+                StrokeThickness="5"
+                Stroke="Red" Height="512" Width="728" Visibility="Collapsed" />
+            </Canvas>
+        </Grid>
+        <CheckBox Grid.Row="2" Style="{StaticResource SquareCheckBox}" Content="Near Mode" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 10 10 10" Name="checkBoxNearMode" Checked="CheckBoxNearModeChanged" Unchecked="CheckBoxNearModeChanged"/>
+        <Button Content="Open Video" Click="btnOpen_Click" Grid.Row="2" Height="25" Margin="188,14,467,13" Name="btnOpen" Width="73" HorizontalAlignment="Center" />
+        <Button Content="Play" Click="btnPlay_Click" Grid.Row="2" Height="25" Margin="262,14,416,13" Name="btnPlay" Width="50" HorizontalAlignment="Center" />
+        <Button Content="Stop" Click="btnStop_Click" Grid.Row="2" Height="25" Margin="313,14,365,13" Name="btnStop" Width="50" HorizontalAlignment="Center" />
+        <Button Content="Back" Click="btnMoveBackward_Click" Grid.Row="2" Height="25" Margin="364,14,314,13" Name="btnMoveBackward" Width="50" HorizontalAlignment="Center" />
+        <Button Content="Forward" Click="btnMoveForward_Click" Grid.Row="2" Height="25" Margin="415,14,263,13" Name="btnMoveForward" Width="50" HorizontalAlignment="Center" />
+        <Button Content="Open Image" Click="imgOpen_Click" Grid.Row="2" Height="25" Margin="0,14,61,13" Name="imgOpen" Width="76" HorizontalAlignment="Right" />
+        <StackPanel Grid.Row="3">
+            <CheckBox Style="{StaticResource SquareCheckBox}" Content="Use Filtering" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Name="checkBoxUseFiltering" Checked="CheckBoxUseFilteringChanged" Unchecked="CheckBoxUseFilteringChanged"/>
+            <StackPanel Orientation="Horizontal">
+            <TextBlock 
+                Text="Inner Band Threshold: (lower numbers are smoother)" 
+                Margin="5,0,0,0"
+                IsEnabled="{Binding ElementName=checkBoxUseFiltering, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" Height="18" Width="297" />
+            <TextBlock 
+                Text="{Binding ElementName=SliderInnerBand, Path=Value}" 
+                HorizontalAlignment="Center"
+                IsEnabled="{Binding ElementName=checkBoxUseFiltering, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Slider Name="SliderInnerBand"
+                    Value="2"
+                    Interval="1"
+                    Minimum="1"
+                    Maximum="8" 
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="SliderInnerBand_ValueChanged" 
+                    IsEnabled="{Binding ElementName=checkBoxUseFiltering, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" Height="26" Width="417" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+            <TextBlock 
+                Text="Outer Band Threshold: (lower numbers are smoother)" 
+                Margin="5,0,0,0"
+                IsEnabled="{Binding ElementName=checkBoxUseFiltering, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" Height="22" Width="298" />
+
+            <TextBlock 
+                Text="{Binding ElementName=SliderOuterBand, Path=Value}" 
+                HorizontalAlignment="Center"
+                IsEnabled="{Binding ElementName=checkBoxUseFiltering, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Slider Name="SliderOuterBand"
+                    Value="5"
+                    Interval="1"
+                    Minimum="1"
+                    Maximum="16" 
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="SliderOuterBand_ValueChanged"
+                    IsEnabled="{Binding ElementName=checkBoxUseFiltering, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" Height="24" Width="418" />
+            </StackPanel>
+
+            <CheckBox Style="{StaticResource SquareCheckBox}" Content="Use Average" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Name="checkBoxUseAverage" Checked="CheckBoxUseAverageChanged" Unchecked="CheckBoxUseAverageChanged"/>
+
+            <StackPanel Orientation="Horizontal">
+            <TextBlock 
+                Text="Number of frames to average:" 
+                Margin="5,0,0,0"
+                IsEnabled="{Binding ElementName=checkBoxUseAverage, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" Height="17" Width="297" />
+            <TextBlock 
+                Text="{Binding ElementName=SliderAverage, Path=Value}" 
+                HorizontalAlignment="Center" 
+                IsEnabled="{Binding ElementName=checkBoxUseAverage, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Slider Name="SliderAverage"
+                    Value="3"
+                    Interval="1"
+                    Minimum="2"
+                    Maximum="12"
+                    IsSnapToTickEnabled="True"
+                    IsEnabled="{Binding ElementName=checkBoxUseAverage, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" ValueChanged="SliderAverage_ValueChanged" Height="24" Width="416" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="4">
+            <StatusBar HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+                <StatusBarItem Padding="0 0 0 10">
+                    <TextBlock Name="statusBarText" Margin="-1 0 0 0" Height="16" Width="423">Press 'Capture' to record to your 'My Videos' directory.</TextBlock>
+                </StatusBarItem>
+                </StatusBar>
+                <StatusBar HorizontalAlignment="Stretch" Name="statusBar2" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+                    <StatusBarItem Padding="0 0 0 10">
+                        <TextBlock Name="statusBarText2" Margin="-1 0 0 0">Press 'Screenshot' to save to your 'My Pictures' directory.</TextBlock>
+                    </StatusBarItem>
+                </StatusBar>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" >
+            <Label Content="Audio Source:" Foreground="{StaticResource KinectPurpleBrush}" FontSize="15" Height="32" Width="100" />
+            <ComboBox Name="AudioDevicesComboBox"
+                        Height="23" Width="150"
+                        ItemsSource="{Binding AudioDevices}"
+                        DisplayMemberPath="Name"
+                        SelectionChanged="AudioDevicesComboBox_SelectionChanged"
+                        />
+            <Button Content="Video Capture" Height="26" Name="CaptureButton" Width="90" Click="CaptureButton_Click" />
+        </StackPanel>
+        <Button Grid.Row="4" Style="{StaticResource SnapshotButton}" Content="Screenshot" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Name="buttonScreenshot"  Click="ButtonScreenshotClick" />
+    </Grid>
+</Window>

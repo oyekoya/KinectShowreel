@@ -1,0 +1,9 @@
+E:\wole\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\bin\Release\KinectDepthSmoothing.dll
+E:\wole\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\bin\Release\KinectDepthSmoothing.pdb
+E:\wole\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\obj\Release\KinectDepthSmoothing.dll
+E:\wole\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\obj\Release\KinectDepthSmoothing.pdb
+C:\wolesse\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\bin\Release\KinectDepthSmoothing.dll
+C:\wolesse\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\bin\Release\KinectDepthSmoothing.pdb
+C:\wolesse\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\obj\Release\KinectDepthSmoothing.csprojResolveAssemblyReference.cache
+C:\wolesse\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\obj\Release\KinectDepthSmoothing.dll
+C:\wolesse\Dropbox\BehaviourTrackingModelling\GreenScreen-WPF\KinectDepthSmoothing\obj\Release\KinectDepthSmoothing.pdb
